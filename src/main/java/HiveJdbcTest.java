@@ -5,14 +5,19 @@ import java.sql.SQLException;
 
 class HiveJdbcTest {
   public static void main(String[] args) throws ClassNotFoundException, SQLException {
+    if (args.length != 3) {
+      System.err.println("Usage: HiveJdbcTest <jdbc-uri> <user> <password>");
+      System.exit(-1);
+    }
+
     Class.forName("org.apache.hive.jdbc.HiveDriver");
 
     Connection connection = DriverManager
-        .getConnection("jdbc:hive2://localhost:10000", "lian", "");
+        .getConnection(args[0], args[1], args[2]);
 
     ResultSet resultSet = connection
         .getMetaData()
-        .getTables(null, "default", null, new String[]{"TABLE"});
+        .getTables(null, "default", null, new String[] { "TABLE" });
 
     while (resultSet.next()) {
       System.out.printf("%s, %s, %s, %s, %s\n",
